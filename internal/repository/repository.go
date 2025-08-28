@@ -51,6 +51,12 @@ func (c *couponStore) UpdateCoupon(ctx context.Context, coupon *model.Coupon) er
 
 	return c.db.WithContext(ctx).Save(coupon).Error
 }
+func (c *couponStore) DeleteCoupon(ctx context.Context, code string) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.db.WithContext(ctx).Delete(&model.Coupon{}, code).Error
+
+}
 func (c *couponStore) GetAllCoupons(ctx context.Context) ([]*model.Coupon, error) {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
