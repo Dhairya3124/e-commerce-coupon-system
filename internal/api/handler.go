@@ -59,3 +59,14 @@ func (h *CouponHandler) CreateCouponHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 }
+func (h *CouponHandler) GetAllCouponsHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	res, err := h.service.GetAllCouponService(ctx)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+	fmt.Println(res)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
+}

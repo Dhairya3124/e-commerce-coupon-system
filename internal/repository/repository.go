@@ -12,7 +12,7 @@ type Coupon interface {
 	Create(ctx context.Context, coupon *model.Coupon) error
 	GetCouponByCode(ctx context.Context, code string) (*model.Coupon, error)
 	UpdateCoupon(ctx context.Context, coupon *model.Coupon) error
-	GetAllCoupons(ctx context.Context) ([]*model.Coupon, error)
+	GetAllCoupons(ctx context.Context) ([]model.Coupon, error)
 }
 
 type couponStore struct {
@@ -57,11 +57,11 @@ func (c *couponStore) DeleteCoupon(ctx context.Context, code string) error {
 	return c.db.WithContext(ctx).Delete(&model.Coupon{}, code).Error
 
 }
-func (c *couponStore) GetAllCoupons(ctx context.Context) ([]*model.Coupon, error) {
+func (c *couponStore) GetAllCoupons(ctx context.Context) ([]model.Coupon, error) {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
-	var coupons []*model.Coupon
+	var coupons []model.Coupon
 	if err := c.db.WithContext(ctx).Find(&coupons).Error; err != nil {
 		return nil, err
 	}

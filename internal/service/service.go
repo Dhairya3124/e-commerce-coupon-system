@@ -16,6 +16,7 @@ type couponService struct {
 }
 type CouponService interface {
 	CreateCouponService(ctx context.Context, coupon *model.Coupon) error
+	GetAllCouponService(ctx context.Context) ([]model.Coupon, error)
 }
 
 func NewCouponService(repo repository.Coupon, cache cache.Cache) CouponService {
@@ -23,5 +24,9 @@ func NewCouponService(repo repository.Coupon, cache cache.Cache) CouponService {
 }
 func (s *couponService) CreateCouponService(ctx context.Context, coupon *model.Coupon) error {
 	return s.repo.Create(ctx, coupon)
+
+}
+func (s *couponService) GetAllCouponService(ctx context.Context) ([]model.Coupon, error) {
+	return s.repo.GetAllCoupons(ctx)
 
 }

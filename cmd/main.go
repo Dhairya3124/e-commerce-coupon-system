@@ -29,6 +29,7 @@ func main() {
 
 		r.Route("/coupons", func(r chi.Router) {
 			r.Post("/", handler.CreateCouponHandler)
+			r.Get("/", handler.GetAllCouponsHandler)
 		})
 
 	})
