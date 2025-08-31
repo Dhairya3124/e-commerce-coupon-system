@@ -13,6 +13,7 @@ type Coupon interface {
 	GetCouponByCode(ctx context.Context, code string) (*model.Coupon, error)
 	UpdateCoupon(ctx context.Context, coupon *model.Coupon) error
 	GetAllCoupons(ctx context.Context) ([]model.Coupon, error)
+	DeleteCoupon(ctx context.Context, code string) error
 }
 
 type couponStore struct {
@@ -54,7 +55,7 @@ func (c *couponStore) UpdateCoupon(ctx context.Context, coupon *model.Coupon) er
 func (c *couponStore) DeleteCoupon(ctx context.Context, code string) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	return c.db.WithContext(ctx).Delete(&model.Coupon{}, code).Error
+	return c.db.WithContext(ctx).Where("code = ?", code).Delete(&model.Coupon{}).Error
 
 }
 func (c *couponStore) GetAllCoupons(ctx context.Context) ([]model.Coupon, error) {

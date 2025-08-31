@@ -18,6 +18,7 @@ type CouponService interface {
 	CreateCouponService(ctx context.Context, coupon *model.Coupon) error
 	GetAllCouponService(ctx context.Context) ([]model.Coupon, error)
 	GetCouponByCodeService(ctx context.Context, code string) (*model.Coupon, error)
+	DeleteCouponByCodeService(ctx context.Context, code string) error
 }
 
 func NewCouponService(repo repository.Coupon, cache cache.Cache) CouponService {
@@ -33,4 +34,7 @@ func (s *couponService) GetAllCouponService(ctx context.Context) ([]model.Coupon
 }
 func (s *couponService) GetCouponByCodeService(ctx context.Context, code string) (*model.Coupon, error) {
 	return s.repo.GetCouponByCode(ctx, code)
+}
+func (s *couponService) DeleteCouponByCodeService(ctx context.Context, code string) error {
+	return s.repo.DeleteCoupon(ctx, code)
 }

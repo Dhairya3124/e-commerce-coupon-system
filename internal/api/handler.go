@@ -85,3 +85,14 @@ func (h *CouponHandler) GetAllCouponsHandler(w http.ResponseWriter, r *http.Requ
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(res)
 }
+
+func (h *CouponHandler) DeleteCouponByCodeHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	code := chi.URLParam(r, "couponID")
+
+	err := h.service.DeleteCouponByCodeService(ctx, code)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+
+}
