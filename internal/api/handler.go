@@ -7,6 +7,7 @@ import (
 
 	"github.com/Dhairya3124/e-commerce-coupon-system/internal/model"
 	"github.com/Dhairya3124/e-commerce-coupon-system/internal/service"
+	"github.com/go-chi/chi"
 )
 
 type CouponHandler struct {
@@ -59,6 +60,20 @@ func (h *CouponHandler) CreateCouponHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 }
+func (h *CouponHandler) GetCouponByCodeHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	code := chi.URLParam(r, "couponID")
+	res, err := h.service.GetCouponByCodeService(ctx, code)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+	fmt.Println(res)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
+
+}
+
 func (h *CouponHandler) GetAllCouponsHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	res, err := h.service.GetAllCouponService(ctx)
