@@ -96,3 +96,32 @@ func (h *CouponHandler) DeleteCouponByCodeHandler(w http.ResponseWriter, r *http
 	}
 
 }
+func (h *CouponHandler) UpdateCouponByCodeHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	code := chi.URLParam(r, "couponID")
+	var req model.CreateCouponRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+	coupon := &model.Coupon{
+		Code:                 req.Code,
+		DiscountType:         req.DiscountType,
+		DiscountValue:        req.DiscountValue,
+		MinOrderValue:        req.MinOrderValue,
+		MaxDiscount:          req.MaxDiscount,
+		StartDate:            req.StartDate,
+		EndDate:              req.EndDate,
+		UsageLimit:           req.UsageLimit,
+		IsActive:             req.IsActive,
+		ApplicableCategories: req.ApplicableCategories,
+		ApplicableProductIDs: req.ApplicableProductIDs,
+		UsageType:            req.UsageType,
+	}
+
+	err := h.service.UpdateCouponByCodeService(ctx, code, coupon)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+
+}

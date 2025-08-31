@@ -11,7 +11,7 @@ import (
 type Coupon interface {
 	Create(ctx context.Context, coupon *model.Coupon) error
 	GetCouponByCode(ctx context.Context, code string) (*model.Coupon, error)
-	UpdateCoupon(ctx context.Context, coupon *model.Coupon) error
+	UpdateCoupon(ctx context.Context, code string, coupon *model.Coupon) error
 	GetAllCoupons(ctx context.Context) ([]model.Coupon, error)
 	DeleteCoupon(ctx context.Context, code string) error
 }
@@ -46,11 +46,11 @@ func (c *couponStore) GetCouponByCode(ctx context.Context, code string) (*model.
 	}
 	return &coupon, nil
 }
-func (c *couponStore) UpdateCoupon(ctx context.Context, coupon *model.Coupon) error {
+func (c *couponStore) UpdateCoupon(ctx context.Context, code string, coupon *model.Coupon) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	return c.db.WithContext(ctx).Save(coupon).Error
+	return c.db.WithContext(ctx).Model(&model.Coupon{}).Where("code = ?", code).Updates(coupon).Error
 }
 func (c *couponStore) DeleteCoupon(ctx context.Context, code string) error {
 	c.mu.Lock()
