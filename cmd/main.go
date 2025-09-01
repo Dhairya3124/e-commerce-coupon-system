@@ -33,6 +33,8 @@ func main() {
 			r.Get("/{couponID}", handler.GetCouponByCodeHandler)
 			r.Delete("/{couponID}", handler.DeleteCouponByCodeHandler)
 			r.Put("/{couponID}", handler.UpdateCouponByCodeHandler)
+			r.Post("/applicable-coupons", handler.ApplicableCouponHandler)
+			r.Post("/apply-coupon/{id}", handler.ApplyCouponHandler)
 		})
 
 	})

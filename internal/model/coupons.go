@@ -52,10 +52,14 @@ type CreateCouponRequest struct {
 	ApplicableProductIDs pq.StringArray `json:"applicable_product_ids"`
 	UsageType            UsageType      `json:"usage_type"`
 }
+
 type CartItem struct {
-	ID    string `json:"id"`
-	Price int    `json:"price"`
+	ID       string `json:"id"`
+	Price    int    `json:"price"`
+	Category string `json:"category"`
+	Quantity int    `json:"quantity"`
 }
+
 type Cart struct {
 	Items []CartItem `json:"cart_items"`
 	Total float64    `json:"total"`

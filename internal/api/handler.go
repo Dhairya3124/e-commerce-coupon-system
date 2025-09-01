@@ -125,3 +125,41 @@ func (h *CouponHandler) UpdateCouponByCodeHandler(w http.ResponseWriter, r *http
 	}
 
 }
+func (h *CouponHandler) ApplicableCouponHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req GetApplicableCouponsRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+	cart := &model.Cart{
+		Items: req.Items,
+		Total: req.Total,
+	}
+	coupons, err := h.service.GetApplicableCouponsService(ctx, cart)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(coupons)
+
+}
+func (h *CouponHandler) ApplyCouponHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	couponID := chi.URLParam(r, "id")
+
+	var cart model.Cart
+	if err := json.NewDecoder(r.Body).Decode(&cart); err != nil {
+		http.Error(w, "Invalid cart payload", http.StatusBadRequest)
+		return
+	}
+
+	updatedCart, err := h.service.ApplyCouponService(ctx, couponID, &cart)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(updatedCart)
+}
